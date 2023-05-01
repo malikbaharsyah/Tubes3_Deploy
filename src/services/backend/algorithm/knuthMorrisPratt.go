@@ -9,7 +9,6 @@ import "fmt"
 func knuthMorrisPratt(text, pattern string) int {
 	m, i := 0, 0
 	table := make([]int, len(text))
-	fmt.Println(table)
 	kmpTab(pattern, table)
 	for m+i < len(text) {
 		if pattern[i] == text[m+i] {
@@ -18,18 +17,16 @@ func knuthMorrisPratt(text, pattern string) int {
 			}
 			i++
 		} else {
-			fmt.Println("Table sebelumnya: ", table)
 			if table[i] > -1 {
 				i = table[i]
 				m = m + i - table[i]
-				fmt.Println("Table sekarang  : ", table)
 			} else {
 				i = 0
 				m++
 			}
 		}
 	}
-	return len(text)
+	return -1
 }
 
 func kmpTab(pattern string, table []int) {
@@ -47,4 +44,10 @@ func kmpTab(pattern string, table []int) {
 			position++
 		}
 	}
+}
+
+func main() {
+	text := "ABABDABACDABABCABAB"
+	pattern := "GGG"
+	fmt.Println(knuthMorrisPratt(text, pattern))
 }
