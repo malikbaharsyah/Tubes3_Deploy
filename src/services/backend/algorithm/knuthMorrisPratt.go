@@ -2,7 +2,7 @@
 Knuth-Morris-Pratt algorithm for pattern matching
 */
 
-package main
+package algorithm
 
 import "fmt"
 
