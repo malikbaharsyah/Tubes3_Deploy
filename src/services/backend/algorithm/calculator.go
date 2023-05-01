@@ -37,18 +37,29 @@ func main() {
 		operands = append(operands, f)
 	}
 
-	// Perform the calculations
-	var result float64 = operands[0]
+	// Perform the calculations according to the order of operations
+	for i := 0; i < len(operators); i++ {
+		switch operators[i] {
+		case "*":
+			operands[i] = operands[i] * operands[i+1]
+			operands = append(operands[:i+1], operands[i+2:]...)
+			operators = append(operators[:i], operators[i+1:]...)
+			i--
+		case "/":
+			operands[i] = operands[i] / operands[i+1]
+			operands = append(operands[:i+1], operands[i+2:]...)
+			operators = append(operators[:i], operators[i+1:]...)
+			i--
+		}
+	}
+
+	result := operands[0]
 	for i := 0; i < len(operators); i++ {
 		switch operators[i] {
 		case "+":
 			result += operands[i+1]
 		case "-":
 			result -= operands[i+1]
-		case "*":
-			result *= operands[i+1]
-		case "/":
-			result /= operands[i+1]
 		}
 	}
 
