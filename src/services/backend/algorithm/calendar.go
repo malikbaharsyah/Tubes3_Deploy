@@ -8,7 +8,7 @@ import (
 
 func Calendar(input string) {
 	// Read the input from the user
-	fmt.Scanln(&input)
+	// fmt.Scanln(&input)
 	fmt.Println("Input:", input)
 
 	// Define the regular expression pattern to match the input

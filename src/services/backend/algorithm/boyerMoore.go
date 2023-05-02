@@ -1,20 +1,18 @@
 package algorithm
 
-func BoyerMoreAlgorithm(text, pattern string) int {
-// fmt.Println(text, pattern)
+func BoyerMooreAlgorithm(text, pattern string) int {
+	// fmt.Println(text, pattern)
 	// fmt.Println(text[0], ", ", text[1], ", ", text[2, ", ", text[3], ", ", text[4], ", ", text[5], ", ", text[6], ", ", text[7], ", ", text[8])
 	// fmt.Println("t ", patten[0], ", e ", pattern[1], ", s ", pattern[2], ", t ", pattern[3])
 	badCharTable := [256]int{}
 	for i := range badCharTable {
-		badCharTable[i] = len(patern)
+		badCharTable[i] = len(pattern)
 		// fmt.Println(badCharTable[], i)
 	}
 	// fmt.Println(badCharTable)
 	for i := 0; i < len(pattern); i++ {
-		badCharTable[pattern[i]] = ax(1, len(pattern)-i-1)
+		badCharTable[pattern[i]] = max(1, len(pattern)-i-1)
 		// fmt.Println("Letters : ", patten[i], "  ->  Values : ", badCharTable[pattern[i]])
-	}
-		// fmt.Println("Letters : ", pattern[i], "  ->  Values : ", badCharTable[pattern[i]])
 	}
 	// fmt.Println(badCharTable)
 
@@ -30,10 +28,12 @@ func BoyerMoreAlgorithm(text, pattern string) int {
 			return i + 1
 		}
 		i += badCharTable[text[i]]
+	}
+	return -1
 }
 
-fnc max(a, b int) int {
-if a > b {
+func max(a, b int) int {
+	if a > b {
 		return a
 	}
 	return b
