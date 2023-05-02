@@ -4,9 +4,7 @@ Knuth-Morris-Pratt algorithm for pattern matching
 
 package algorithm
 
-import "fmt"
-
-func knuthMorrisPratt(text, pattern string) int {
+func KnuthMorrisPratt(text, pattern string) int {
 	m, i := 0, 0
 	table := make([]int, len(text))
 	kmpTab(pattern, table)
@@ -46,8 +44,8 @@ func kmpTab(pattern string, table []int) {
 	}
 }
 
-func main() {
-	text := "ABABDABACDABABCABAB"
-	pattern := "GGG"
-	fmt.Println(knuthMorrisPratt(text, pattern))
-}
+// func main() {
+// 	text := "ABABDABACDABABCABAB"
+// 	pattern := "GGG"
+// 	fmt.Println(KnuthMorrisPratt(text, pattern))
+// }

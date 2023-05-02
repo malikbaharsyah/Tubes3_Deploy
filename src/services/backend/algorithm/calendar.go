@@ -1,4 +1,4 @@
-package main
+package algorithm
 
 import (
 	"fmt"
@@ -6,9 +6,8 @@ import (
 	"time"
 )
 
-func main() {
+func Calendar(input string) {
 	// Read the input from the user
-	var input string
 	fmt.Scanln(&input)
 	fmt.Println("Input:", input)
 

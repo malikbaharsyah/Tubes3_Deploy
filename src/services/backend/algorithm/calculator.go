@@ -1,4 +1,4 @@
-package main
+package algorithm
 
 import (
 	"fmt"
@@ -7,9 +7,8 @@ import (
 	"strings"
 )
 
-func main() {
+func Calculator(input string) {
 	// Read the input from the user
-	var input string
 	fmt.Scanln(&input)
 	fmt.Println("Input:", input)
 
