@@ -8,8 +8,8 @@ import (
 
 func Calendar(input string) {
 	// Read the input from the user
-	fmt.Scanln(&input)
-	fmt.Println("Input:", input)
+	// fmt.Scanln(&input)
+	// fmt.Println("Input:", input)
 
 	// Define the regular expression pattern to match the input
 	pattern := "((0[1-9]|[1-9]|[12]\\d|3[01])/(0[1-9]|1[0-2]|[1-9])/[12]\\d{3})"
