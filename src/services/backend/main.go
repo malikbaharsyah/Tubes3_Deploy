@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"example.com/algorithm"
+	//"backend/model"
+
+	//"github.com/gin-gonic/gin"
+
+	"backend/algorithm"
 )
 
 func main() {
-	fmt.Println("Hello World")
-	algorithm.Calculator("1+1")
+	algorithm.Calculator("2 * ((3*(-(2.3555)))*5)")
 }
