@@ -3,9 +3,10 @@ package model
 import (
 	"encoding/json"
 	"net/http"
-	"gorm.io/gorm"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB

@@ -1,12 +1,8 @@
-/*
-Knuth-Morris-Pratt algorithm for pattern matching
-*/
-
 package algorithm
 
 func KnuthMorrisPratt(text, pattern string) int {
 	m, i := 0, 0
-	table := make([]int, len(text))
+	table := make([]int, len(pattern))
 	kmpTab(pattern, table)
 	for m+i < len(text) {
 		if pattern[i] == text[m+i] {
@@ -43,9 +39,3 @@ func kmpTab(pattern string, table []int) {
 		}
 	}
 }
-
-// func main() {
-// 	text := "ABABDABACDABABCABAB"
-// 	pattern := "GGG"
-// 	fmt.Println(KnuthMorrisPratt(text, pattern))
-// }
