@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Product Form</title>
+  </head>
+  <body>
+    <h1>Product Form</h1>
+    <form id="productForm">
+      <label for="nama_product">Product Name:</label><br>
+      <input type="text" id="nama_product" name="nama_product"><br>
+      <label for="deskripsi">Description:</label><br>
+      <input type="text" id="deskripsi" name="deskripsi"><br><br>
+      <input type="submit" value="Submit">
+    </form> 
+    <script>
+      document.getElementById("productForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/product");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify({
+          nama_product: document.getElementById("nama_product").value,
+          deskripsi: document.getElementById("deskripsi").value
+        }));
+      });
+    </script>
+  </body>
+</html>
