@@ -54,6 +54,7 @@
 .TextBox input[placeholder] {
     color: #265cae;
     padding-left: 20px;
+    padding-right: 20px;;
     font-size: 17px;
     font-weight: bold;
 }
@@ -64,7 +65,7 @@
   position: relative;
   display: block;
   bottom: 480px;
-  right: -20px;
+  right: -50px;
   text-align-last: left;
   padding: 10px 25px; /* ukuran bubble text */
   margin-bottom: 30px; /*jarak antar bubble*/
@@ -110,7 +111,7 @@
   position: relative;
   display: block;
   bottom: 480px;
-  right: -20px;
+  right: -50px;
   text-align-last: left;
   padding: 10px 25px;
   margin-bottom: 30px;
