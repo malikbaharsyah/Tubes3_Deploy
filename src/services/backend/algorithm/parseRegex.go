@@ -5,8 +5,6 @@ import (
 	"regexp"
 )
 
-// array of question
-
 func ParseInput(input string, listOfQuestion []string, listOfAnswer []string) string {
 	patt1 := "^(?i)(Apakah|Apa|Bagaimana|Kenapa|Siapa|Mengapa|Kapan|Di mana)\\s.+\\??"
 	reg1 := regexp.MustCompile(patt1)
@@ -14,9 +12,7 @@ func ParseInput(input string, listOfQuestion []string, listOfAnswer []string) st
 	patt2 := "^(?i)(Hari\\s\\d{1,2}/\\d{1,2}/\\d{4}|\\d{1,2}/\\d{1,2}/\\d{4})\\??$"
 	reg2 := regexp.MustCompile(patt2)
 
-	// patt3 := "^(?i)Hasil dari\\s.+|^\\s*(\\+|-|\\*|\\/|%|\\^|\\()\\s*\\d+\\s*(\\+|-|\\*|\\/|%|\\^|\\()\\s*\\d+.*\\??$"
 	patt3 := `^(Hasil dari\s*|Hasil\s*)?-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*\s*(\?\s*|\s\?\s*)?$`
-
 	reg3 := regexp.MustCompile(patt3)
 
 	if reg1.MatchString(input) {
@@ -85,27 +81,3 @@ func getCalculator(input string) string {
 	}
 	return ""
 }
-
-// func getCalculator(input string) string {
-// 	patt := "^(?i)Hasil dari (.+)|([0-9]+\\s*[-+*/%^]\\s*[0-9]+.*)$"
-// 	reg := regexp.MustCompile(patt)
-// 	matches := reg.FindStringSubmatch(input)
-// 	if len(matches) == 3 {
-// 		if len(matches[1]) > 0 {
-// 			expr := "(" + matches[1] + ")"
-// 			result, err := evaluateExpression(expr)
-// 			if err != nil {
-// 				return ""
-// 			}
-// 			return fmt.Sprintf("%v", result)
-// 		} else {
-// 			expr := matches[2]
-// 			result, err := evaluateExpression(expr)
-// 			if err != nil {
-// 				return ""
-// 			}
-// 			return fmt.Sprintf("%v", result)
-// 		}
-// 	}
-// 	return ""
-// }
