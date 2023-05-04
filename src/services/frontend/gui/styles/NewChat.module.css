@@ -18,7 +18,9 @@
 }
 
 .new-chat:hover {
+    transform: translateY;
     background-color: #3EE7BC;
+    box-shadow: inset 0 0 16px rgba(72, 84, 254, 1);
     color: #000000;
     
 }
