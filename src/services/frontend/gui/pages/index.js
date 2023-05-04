@@ -7,6 +7,7 @@ import RadioButtonStyles from '../styles/RadioButton.module.css';
 import { TextBox } from './textBox';
 import { RadioButton } from './radioButton';
 import { NewChat } from './newChat';
+import { HistoryBox } from './history';
  
 
 export default function Home() {
@@ -30,6 +31,7 @@ export default function Home() {
             <h2>HISTORY</h2>
           </div>
             <NewChat />
+            <HistoryBox />
         </div>
         <div className={`${leftSideBarStyles['bottom-left-sidebar']}`}>
         </div>

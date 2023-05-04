@@ -29,9 +29,10 @@
     color: #D9D9D9;
     font-size: xx-large;
     font-weight: bold;
-    padding-top: 100px;
+    padding-top: 90px;
     text-align: center;
     text-shadow: 0 0 16px #000000;
     /* letakkan text di layer paling depan */
     z-index: 1;
   }
+
