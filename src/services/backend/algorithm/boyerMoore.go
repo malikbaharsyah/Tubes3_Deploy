@@ -1,6 +1,7 @@
 package algorithm
 
 func BoyerMooreAlgorithm(text, pattern string) int {
+
  // fmt.Println(text, pattern)
  // fmt.Println(text[0], ", ", text[1], ", ", text[2, ", ", text[3], ", ", text[4], ", ", text[5], ", ", text[6], ", ", text[7], ", ", text[8])
  // fmt.Println("t ", patten[0], ", e ", pattern[1], ", s ", pattern[2], ", t ", pattern[3])
@@ -37,7 +38,6 @@ func max(a, b int) int {
   return a
  }
  return b
-}
 
 // func main() {
 //  fmt.Println(boyerMooreAlgorithm("This is A TEST test", "test"))
