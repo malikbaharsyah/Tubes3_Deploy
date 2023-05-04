@@ -3,52 +3,47 @@ package algorithm
 import (
 	"fmt"
 	"regexp"
+	"strings"
 )
 
-func ParseInput(input string, listOfQuestion []string) {
-	patt1 := "^(?i)(Apakah|Apa|Bagaimana|Kenapa|Siapa|Mengapa|Kapan|Di mana)\\s.+\\??"
-	reg1 := regexp.MustCompile(patt1)
+func ParseInput(input string, listOfQuestion []string, param int) {
+	patternDate := `^(?i)(Hari\s\d{1,2}/\d{1,2}/\d{4}|\d{1,2}/\d{1,2}/\d{4})\??$`
+	regDate := regexp.MustCompile(patternDate)
 
-	patt2 := "^(?i)(Hari\\s\\d{1,2}/\\d{1,2}/\\d{4}|\\d{1,2}/\\d{1,2}/\\d{4})\\??$"
-	reg2 := regexp.MustCompile(patt2)
+	patternCal := `^(Hasil dari\s*|Hasil\s*)?-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*\s*(\?\s*|\s\?\s*)?$`
+	regCal := regexp.MustCompile(patternCal)
 
-	patt3 := `^(Hasil dari\s*|Hasil\s*)?-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*\s*(\?\s*|\s\?\s*)?$`
-	reg3 := regexp.MustCompile(patt3)
+	patternAdd := `(?i)^tambahkan pertanyaan\s(.+)\sdengan jawaban\s(.+)$`
+	regAdd := regexp.MustCompile(patternAdd)
 
-	if reg1.MatchString(input) {
-		fmt.Println("Question")
-		input = getQuestion(input)
-		fmt.Println(input)
-		index, persen := searchQuestion(input, listOfQuestion)
-		fmt.Println(index, persen)
-	} else if reg2.MatchString(input) {
+	patternDel := `(?i)^hapus pertanyaan\s(.+)$`
+	regDel := regexp.MustCompile(patternDel)
+
+	if regDate.MatchString(input) {
 		fmt.Println("Date")
 		input = getDate(input)
-		fmt.Println(input)
 		Calendar(input)
-	} else if reg3.MatchString(input) {
+	} else if regCal.MatchString(input) {
 		fmt.Println("Calculator")
 		input = getCalculator(input)
-		fmt.Println(input)
 		Calculator(input)
+	} else if regAdd.MatchString(input) {
+		fmt.Println("Add Question")
+		question, answer := extractQuestionAnswer(input)
+		fmt.Println(question, answer)
+	} else if regDel.MatchString(input) {
+		fmt.Println("Delete Question")
+		question := getQuestionDeleteCommand(input)
+		fmt.Println(question)
 	} else {
-		fmt.Println("Invalid input")
+		fmt.Println("Question")
+		question, index := searchQuestion(input, listOfQuestion, param)
+		fmt.Println(question, index)
 	}
-}
-
-func getQuestion(input string) string {
-	patt := "^(?i)(Apakah|Apa|Bagaimana|Kenapa|Siapa|Mengapa|Kapan|Di mana)\\s(.+)\\?$"
-	reg := regexp.MustCompile(patt)
-	matches := reg.FindStringSubmatch(input)
-	if len(matches) == 3 {
-		return matches[2]
-	}
-	return ""
 }
 
 func getDate(input string) string {
-	patt := "^(?i)(Hari\\s)?(\\d{1,2}/\\d{1,2}/\\d{4})\\??$"
-	reg := regexp.MustCompile(patt)
+	reg := regexp.MustCompile(`^(?i)(Hari\s\d{1,2}/\d{1,2}/\d{4}|\d{1,2}/\d{1,2}/\d{4})\??$`)
 	matches := reg.FindStringSubmatch(input)
 	if len(matches) == 3 {
 		return matches[2]
@@ -57,8 +52,7 @@ func getDate(input string) string {
 }
 
 func getCalculator(input string) string {
-	patt := "^(?i)Hasil dari (.+)|([0-9]+\\s*[-+*/%^]\\s*[0-9]+.*)$"
-	reg := regexp.MustCompile(patt)
+	reg := regexp.MustCompile(`^(Hasil dari\s*|Hasil\s*)?-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*\s*(\?\s*|\s\?\s*)?$`)
 	matches := reg.FindStringSubmatch(input)
 	if len(matches) == 3 {
 		if len(matches[1]) > 0 {
@@ -76,4 +70,25 @@ func getCalculator(input string) string {
 		}
 	}
 	return ""
+}
+
+func extractQuestionAnswer(input string) (string, string) {
+	pattern := regexp.MustCompile(`(?i)^tambahkan pertanyaan\s(.+)\sdengan jawaban\s(.+)$`)
+	matches := pattern.FindStringSubmatch(input)
+	if len(matches) < 3 {
+		return "", ""
+	}
+	question := strings.TrimSpace(matches[1])
+	answer := strings.TrimSpace(matches[2])
+	return question, answer
+}
+
+func getQuestionDeleteCommand(input string) string {
+	reg := regexp.MustCompile(`(?i)hapus pertanyaan (.*)`)
+	matches := reg.FindStringSubmatch(input)
+	if len(matches) < 2 {
+		return ""
+	}
+	question := strings.TrimSpace(matches[1])
+	return question
 }

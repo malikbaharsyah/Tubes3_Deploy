@@ -1,48 +1,61 @@
 package algorithm
 
 import (
-	"fmt"
-
 	"github.com/texttheater/golang-levenshtein/levenshtein"
 )
 
-func searchQuestion(pattern string, questions []string) (int, float64) {
-	// Cari pertanyaan yang cocok dengan pattern menggunakan KMP
-	for i, question := range questions {
-		if KnuthMorrisPratt(question, pattern) != -1 {
-			return i, 1.0
+func searchQuestion(pattern string, questions []string, param int) ([]string, []int) {
+	if param == 0 {
+		for i, question := range questions {
+			if KnuthMorrisPratt(question, pattern) != -1 {
+				return []string{question}, []int{i}
+			}
 		}
+		return lv(pattern, questions)
+	} else {
+		for i, question := range questions {
+			if BoyerMooreAlgorithm(question, pattern) != -1 {
+				return []string{question}, []int{i}
+			}
+		}
+		return lv(pattern, questions)
 	}
+}
 
-	// Cari pertanyaan yang mirip dengan pattern menggunakan Levenshtein
-	minDist := len(pattern)
-	var index int = -1
+func lv(pattern string, questions []string) ([]string, []int) {
+	type matrix struct {
+		index int
+		sim   float64
+	}
+	matrixSim := make([]matrix, len(questions))
 	for i, question := range questions {
+		matrixSim[i].index = i
 		dist := levenshtein.DistanceForStrings([]rune(pattern), []rune(question), levenshtein.DefaultOptions)
-		similarity := 1.0 - (float64(dist) / float64(len(question)))
-		if similarity == 1.0 {
-			return i, 1.0
-		} else if similarity > 0.7 && similarity > float64(minDist)/float64(len(question)) {
-			minDist = dist
-			index = i
+		matrixSim[i].sim = float64(dist) / float64(len(pattern))
+	}
+	for i := 0; i < len(matrixSim); i++ {
+		for j := i + 1; j < len(matrixSim); j++ {
+			if matrixSim[i].sim > matrixSim[j].sim {
+				temp := matrixSim[i]
+				matrixSim[i] = matrixSim[j]
+				matrixSim[j] = temp
+			}
 		}
 	}
-
-	// Jika jarak terlalu jauh, anggap tidak ada pertanyaan yang cocok
-	if minDist > len(pattern)/2 {
-		index = -1
-		fmt.Println("Tidak ada pertanyaan yang cocok")
+	highestSim := matrixSim[0].sim
+	if highestSim > 0.8 {
+		return []string{questions[matrixSim[0].index]}, []int{matrixSim[0].index}
 	}
-
-	// Hitung persentase kemiripan
-	var similarity float64 = 0.0
-	if index != -1 {
-		similarity = 1.0 - (float64(minDist)/float64(len(questions[index])))*100.0
-		if similarity < 50.0 {
-			index = -1
-			fmt.Println("Tidak ada pertanyaan yang cocok")
+	var top3 []float64
+	var top3Index []int
+	for i := 0; i < 3; i++ {
+		top3 = append(top3, matrixSim[i].sim)
+		top3Index = append(top3Index, matrixSim[i].index)
+	}
+	for i := 0; i < len(top3); i++ {
+		if top3[i] > 0.4 && top3[i] < 0.8 {
+			return []string{questions[top3Index[0]], questions[top3Index[1]], questions[top3Index[2]]}, []int{top3Index[0], top3Index[1], top3Index[2]}
 		}
 	}
-
-	return index, similarity
+	return []string{"Tidak ada pertanyaan yang cocok"}, []int{-1}
 }
