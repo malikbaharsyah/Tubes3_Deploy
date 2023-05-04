@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Product Form</title>
+    <title>GPT Form</title>
   </head>
   <body>
-    <h1>Product Form</h1>
-    <form id="productForm">
-      <label for="nama_product">Product Name:</label><br>
-      <input type="text" id="nama_product" name="nama_product"><br>
-      <label for="deskripsi">Description:</label><br>
-      <input type="text" id="deskripsi" name="deskripsi"><br><br>
-      <input type="submit" value="Submit">
+    <h1>GPT Form</h1>
+    <form id="gptForm">
+      <label for="pertanyaan">Pertanyaan:</label><br>
+      <input type="text" id="pertanyaan" name="pertanyaan"><br>
+      <label for="jawaban">Jawaban:</label><br>
+      <input type="text" id="jawaban" name="jawaban"><br><br>
+      <input type="submit" value="Tambah">
     </form> 
     <script>
-      document.getElementById("productForm").addEventListener("submit", function(event) {
+      document.getElementById("gptForm").addEventListener("submit", function(event) {
         event.preventDefault();
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/product");
+        xhr.open("POST", "/api/gpt");
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.send(JSON.stringify({
-          nama_product: document.getElementById("nama_product").value,
-          deskripsi: document.getElementById("deskripsi").value
+          pertanyaan: document.getElementById("pertanyaan").value,
+          jawaban: document.getElementById("jawaban").value
         }));
       });
     </script>

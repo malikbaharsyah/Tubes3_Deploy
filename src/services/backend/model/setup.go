@@ -3,44 +3,45 @@ package model
 import (
 	"encoding/json"
 	"net/http"
-	"gorm.io/gorm"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-type Product struct {
-	Id          int64  `gorm:"primaryKey" json:"id"`
-	NamaProduct string `gorm:"type:varchar(300)" json:"nama_product"`
-	Deskripsi   string `gorm:"type:text" json:"deskripsi"`
+type ChatGPT struct {
+	Id         int64  `gorm:"primaryKey" json:"id"`
+	Pertanyaan string `gorm:"type:text" json:"pertanyaan"`
+	Jawaban    string `gorm:"type:text" json:"jawaban"`
 }
 
 func ConnectDatabase() {
-	database, err := gorm.Open(mysql.Open("root:root@tcp(localhost:3306)/test"))
+	database, err := gorm.Open(mysql.Open("root:root@tcp(localhost:3306)/gpt"))
 	if err != nil {
 		panic(err)
 	}
 
-	database.AutoMigrate(&Product{})
+	database.AutoMigrate(&ChatGPT{})
 
 	DB = database
 }
 
 func Index(c *gin.Context) {
 
-	var products []Product
+	var GPTs []ChatGPT
 
-	DB.Find(&products)
-	c.JSON(http.StatusOK, gin.H{"products": products})
+	DB.Find(&GPTs)
+	c.JSON(http.StatusOK, gin.H{"GPTs": GPTs})
 
 }
 
 func Show(c *gin.Context) {
-	var product Product
+	var gpt ChatGPT
 	id := c.Param("id")
 
-	if err := DB.First(&product, id).Error; err != nil {
+	if err := DB.First(&gpt, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data tidak ditemukan"})
@@ -51,33 +52,33 @@ func Show(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"product": product})
+	c.JSON(http.StatusOK, gin.H{"gpt": gpt})
 }
 
 func Create(c *gin.Context) {
 
-	var product Product
+	var gpt ChatGPT
 
-	if err := c.ShouldBindJSON(&product); err != nil {
+	if err := c.ShouldBindJSON(&gpt); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	DB.Create(&product)
-	c.JSON(http.StatusOK, gin.H{"product": product})
+	DB.Create(&gpt)
+	c.JSON(http.StatusOK, gin.H{"gpt": gpt})
 }
 
 func Update(c *gin.Context) {
-	var product Product
+	var gpt ChatGPT
 	id := c.Param("id")
 
-	if err := c.ShouldBindJSON(&product); err != nil {
+	if err := c.ShouldBindJSON(&gpt); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	if DB.Model(&product).Where("id = ?", id).Updates(&product).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "tidak dapat mengupdate product"})
+	if DB.Model(&gpt).Where("id = ?", id).Updates(&gpt).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "tidak dapat mengupdate gpt"})
 		return
 	}
 
@@ -87,7 +88,7 @@ func Update(c *gin.Context) {
 
 func Delete(c *gin.Context) {
 
-	var product Product
+	var gpt ChatGPT
 
 	var input struct {
 		Id json.Number
@@ -99,8 +100,8 @@ func Delete(c *gin.Context) {
 	}
 
 	id, _ := input.Id.Int64()
-	if DB.Delete(&product, id).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus product"})
+	if DB.Delete(&gpt, id).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus gpt"})
 		return
 	}
 
