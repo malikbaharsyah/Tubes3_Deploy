@@ -1,14 +1,28 @@
 package main
 
 import (
-	"example.com/algorithm"
-	"fmt"
+	"backend/model"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	// fmt.Println("Hello World!")
-	fmt.Println(algorithm.BoyerMooreAlgorithm("This is A TEST test", "is"))
-	fmt.Println(algorithm.KnuthMorrisPratt("This is A TEST test", "test"))
-	algorithm.Calculator("24+6/2*10")
-	algorithm.Calendar("29/2/2016")
+	r := gin.Default()
+	model.ConnectDatabase()
+
+	r.GET("/api/products", model.Index)
+	r.GET("/api/product/:id", model.Show)
+	r.POST("/api/product", model.Create)
+	r.PUT("/api/product/:id", model.Update)
+	r.DELETE("/api/product", model.Delete)
+
+	// Serve the HTML form
+	r.GET("/form", func(c *gin.Context) {
+		c.File("tes.html")
+	})
+
+	//add new data nama product dan deskripsi laptop
+	// laptop := model.Product{NamaProduct: "Laptop", Deskripsi: "Laptop adalah komputer jinjing"}
+
+
+	r.Run()
 }
