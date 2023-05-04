@@ -20,8 +20,8 @@
 .TextBox {
   position: fixed;
   top: 25px;
-  height:100px;
-  width: 880px;
+  height: 100px;
+  width: 860px;
   padding-right: 100px;
   padding-top: 500px;
   font-weight: bold;
@@ -29,8 +29,25 @@
   color: #265cae;
   overflow-y: scroll;
   overflow-x: hidden;
-
 }
+
+.TextBox::-webkit-scrollbar {
+  width: 10px;
+}
+
+.TextBox::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+
+.TextBox::-webkit-scrollbar-thumb {
+  background-color: #346769;
+  border-radius: 10px;
+}
+
+.TextBox::-webkit-scrollbar-thumb:hover {
+  background-color: #3EE7BC;
+}
+
 
 /* ini tempat ngetik */
 .TextBox input { 
