@@ -64,7 +64,7 @@
   position: relative;
   display: block;
   bottom: 480px;
-  left: 80px;
+  right: -20px;
   text-align-last: left;
   padding: 10px 25px; /* ukuran bubble text */
   margin-bottom: 30px; /*jarak antar bubble*/
@@ -213,7 +213,7 @@
 
 .chat-bubble:before {
   content: "";
-  position: absolute;
+  position: fixed;
   bottom: -10px;
   left: 50px;
   border: 20px solid transparent;
