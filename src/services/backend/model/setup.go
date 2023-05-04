@@ -1,7 +1,9 @@
 package model
 
 import (
+	"backend/algorithm"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +12,8 @@ import (
 )
 
 var DB *gorm.DB
+var questions []string
+var answers []string
 
 type ChatGPT struct {
 	Id         int64  `gorm:"primaryKey" json:"id"`
@@ -26,6 +30,10 @@ func ConnectDatabase() {
 	database.AutoMigrate(&ChatGPT{})
 
 	DB = database
+	// get all Pertanyaan inside chat_gpt table and store it in questions
+	DB.Model(&ChatGPT{}).Select("pertanyaan").Find(&questions)
+	// get all Jawaban inside chat_gpt table and store it in answers
+	DB.Model(&ChatGPT{}).Select("jawaban").Find(&answers)
 }
 
 func Index(c *gin.Context) {
@@ -38,21 +46,14 @@ func Index(c *gin.Context) {
 }
 
 func Show(c *gin.Context) {
-	var gpt ChatGPT
-	id := c.Param("id")
+	pertanyaan := c.Param("pertanyaan")
+	pertanyaan = pertanyaan[1:]
+	fmt.Println(pertanyaan)
+	response := algorithm.ParseInput(pertanyaan, questions, answers)
+	fmt.Println(response)
 
-	if err := DB.First(&gpt, id).Error; err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data tidak ditemukan"})
-			return
-		default:
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
-			return
-		}
-	}
+	c.JSON(http.StatusOK, gin.H{"answer": response})
 
-	c.JSON(http.StatusOK, gin.H{"gpt": gpt})
 }
 
 func Create(c *gin.Context) {

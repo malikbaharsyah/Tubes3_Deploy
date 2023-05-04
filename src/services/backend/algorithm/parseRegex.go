@@ -7,7 +7,7 @@ import (
 
 // array of question
 
-func ParseInput(input string, listOfQuestion []string) {
+func ParseInput(input string, listOfQuestion []string, listOfAnswer []string) string {
 	patt1 := "^(?i)(Apakah|Apa|Bagaimana|Kenapa|Siapa|Mengapa|Kapan|Di mana)\\s.+\\??"
 	reg1 := regexp.MustCompile(patt1)
 
@@ -24,19 +24,23 @@ func ParseInput(input string, listOfQuestion []string) {
 		input = getQuestion(input)
 		fmt.Println(input)
 		index, persen := searchQuestion(input, listOfQuestion)
-		fmt.Println(index, persen)
+		if persen > 0.9 {
+			return listOfAnswer[index]
+		} else {
+			return "Invalid input"
+		}
 	} else if reg2.MatchString(input) {
 		fmt.Println("Date")
 		input = getDate(input)
 		fmt.Println(input)
-		Calendar(input)
+		return Calendar(input)
 	} else if reg3.MatchString(input) {
 		fmt.Println("Calculator")
 		input = getCalculator(input)
 		fmt.Println(input)
-		Calculator(input)
+		return Calculator(input)
 	} else {
-		fmt.Println("Invalid input")
+		return "Invalid input"
 	}
 }
 

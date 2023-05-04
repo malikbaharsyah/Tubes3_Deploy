@@ -1,33 +1,29 @@
 package algorithm
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
 
-func Calendar(dateStr string) {
+func Calendar(dateStr string) string {
 	date := strings.Split(dateStr, "/")
 
 	// validasi nilai negatif tanggal
 	day, err := strconv.Atoi(date[0])
 	if err != nil || day < 1 {
-		fmt.Println("Tanggal tidak valid")
-		return
+		return "Tanggal tidak valid"
 	}
 
 	// validasi bulan
 	month, err := strconv.Atoi(date[1])
 	if err != nil || month < 1 || month > 12 {
-		fmt.Println("Bulan tidak valid")
-		return
+		return "Bulan tidak valid"
 	}
 
 	// validasi tahun
 	year, err := strconv.Atoi(date[2])
 	if err != nil {
-		fmt.Println("Tahun tidak valid")
-		return
+		return "Tahun tidak valid"
 	}
 
 	// validasi tahun kabisat
@@ -46,8 +42,7 @@ func Calendar(dateStr string) {
 	}
 
 	if day > maxDay {
-		fmt.Println("Tanggal tidak valid")
-		return
+		return "Tanggal tidak valid"
 	}
 
 	// hitung hari dalam minggu
@@ -60,5 +55,5 @@ func Calendar(dateStr string) {
 	dayOfWeekIndex := (y + y/4 - y/100 + y/400 + t[month-1] + day) % 7
 
 	// cetak hari dalam minggu
-	fmt.Println(daysOfWeek[dayOfWeekIndex])
+	return daysOfWeek[dayOfWeekIndex]
 }

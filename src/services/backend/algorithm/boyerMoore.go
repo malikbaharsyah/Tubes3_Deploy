@@ -38,6 +38,7 @@ func max(a, b int) int {
   return a
  }
  return b
+}
 
 // func main() {
 //  fmt.Println(boyerMooreAlgorithm("This is A TEST test", "test"))
