@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func Calculator(input string) {
+func Calculator(input string) string {
 	fmt.Println("Input:", input)
 
 	pattern := `^\s*-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*$`
@@ -14,11 +14,11 @@ func Calculator(input string) {
 
 	if !match {
 		fmt.Println("Invalid input")
-		return
+		return "Invalid input"
 	}
 
 	result, _ := evaluateExpression(input)
-	fmt.Println("Result:", result)
+	return strconv.FormatFloat(result, 'f', -1, 32)
 }
 
 func evaluateExpression(expression string) (float64, error) {
