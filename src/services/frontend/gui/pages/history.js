@@ -4,25 +4,25 @@ import axios from 'axios';
 
 export const HistoryBox = ({ onClearClick, setMessagesToList,
   isSubmitClicked, setIsSubmitClicked, userInput,
-  addMessage, newBotMessage }) => {
+  addMessage }) => {
   const buttons = ["History 1", "History 2", "History 3", "History 4", "History 5"];
   const [activeIndex, setActiveIndex] = useState(-1);
-  const listOfQuestions = ["Q1", "Q2", "Q3", "Q4", "Q5"];
-  const listOfAnswers = ["A1", "A2", "A3", "A4", "A5"];
 
   useEffect(() => {
-    // Perform actions when the submit button is clicked
-    if (isSubmitClicked) {
-      // Clear the history or perform any other desired actions
-      if (activeIndex === -1) {
-        alert("Pilih history terlebih dahulu!")
+    const performSubmitAction = async () => {
+      if (isSubmitClicked) {
+        // Clear the history or perform any other desired actions
+        if (activeIndex === -1) {
+          alert("Pilih history terlebih dahulu!");
+        } else {
+          const botResponse = await addMessage(userInput);
+          addMessageToHistory(activeIndex, userInput, botResponse);
+        }
+        setIsSubmitClicked(false); // Reset the submit click state
       }
-      else {
-        addMessage(userInput);
-        addMessageToHistory(activeIndex, userInput, newBotMessage.text);
-      }
-      setIsSubmitClicked(false); // Reset the submit click state
-    }
+    };
+  
+    performSubmitAction();
   }, [isSubmitClicked, onClearClick]);
 
   const handleHistoryClick = (index) => {

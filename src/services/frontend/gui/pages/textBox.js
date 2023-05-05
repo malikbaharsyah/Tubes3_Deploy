@@ -30,18 +30,21 @@ export const TextBox = () => {
         const response = await axios.get(`http://localhost:8000/api/gpt/${text}`);
         const database = response.data.answer;
         if (database) {
-          setNewBotMessage({ text: database, sender: 'bot' });
+          const newBotMessage = { text: database, sender: 'bot' };
           setBotMessages([...botmessages, newBotMessage]);
           setLastSender('bot');
+          return newBotMessage.text;
         }
       } catch (error) {
         console.error(error);
-        setNewBotMessage({ text: 'Maaf, saya tidak mengerti.', sender: 'bot' });
-        setBotMessages([...botmessages, newBotMessage]);
-        setLastSender('bot');
       }
+      const newBotMessage = { text: 'Maaf, saya tidak mengerti.', sender: 'bot' };
+      setBotMessages([...botmessages, newBotMessage]);
+      setLastSender('bot');
+      return newBotMessage.text;
     }
-  }
+  };
+  
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -101,8 +104,7 @@ export const TextBox = () => {
       isSubmitClicked={isSubmitClicked}
       setIsSubmitClicked={setIsSubmitClicked}
       userInput={text}
-      addMessage={addMessage}
-      newBotMessage={newBotMessage}/>
+      addMessage={addMessage}/>
     </div>
   );
 };
