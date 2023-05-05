@@ -1,23 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/ChatBox.module.css';
+import axios from 'axios';
+import { HistoryBox } from './history';
 
 export const TextBox = () => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
   const [lastSender, setLastSender] = useState('');
+  const [botmessages, setBotMessages] = useState([]);
+  const [newBotMessage, setNewBotMessage] = useState({});
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   const handleTextChange = (event) => {
     setText(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitClicked(true);
+  };
+
+  const addMessage = async (text) => {
     if (text.trim() !== '') {
-      setMessages([...messages, { text, sender: 'me' }]);
+      const newMessage = { text, sender: 'me' };
+      setMessages([...messages, newMessage]);
       setText('');
       setLastSender('me');
+      try {
+        const response = await axios.get(`http://localhost:8000/api/gpt/${text}`);
+        const database = response.data.answer;
+        if (database) {
+          setNewBotMessage({ text: database, sender: 'bot' });
+          setBotMessages([...botmessages, newBotMessage]);
+          setLastSender('bot');
+        }
+      } catch (error) {
+        console.error(error);
+        setNewBotMessage({ text: 'Maaf, saya tidak mengerti.', sender: 'bot' });
+        setBotMessages([...botmessages, newBotMessage]);
+        setLastSender('bot');
+      }
     }
-  };
+  }
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -25,8 +49,27 @@ export const TextBox = () => {
     }
   };
 
+
+  const clearMessages = () => {
+    setMessages([]);
+    setBotMessages([]);
+  };
+
+  const updateMessages = (question, answer) => {
+    setMessages(prevMessages => [...prevMessages, { text: question, sender: 'me' }]);
+    setBotMessages(prevBotMessages => [...prevBotMessages, { text: answer, sender: 'bot' }]);
+    setLastSender('bot');
+  };  
+
+  const setMessagesToList = (listOfQuestions, listOfAnswers) => {
+    clearMessages();
+    for (let i = 0; i < listOfQuestions.length; i++) {
+      updateMessages(listOfQuestions[i], listOfAnswers[i]);
+    }
+  };
+
+
   return (
-    // <div className={styles['chat-box']} style={{ overflowY: 'scroll' }}>
     <div className={styles.TextBox} style={{ overflowY: 'scroll' }}>
       <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
         <input
@@ -34,7 +77,6 @@ export const TextBox = () => {
           value={text}
           onChange={handleTextChange}
           placeholder="Send a message."
-          
         />
         <div className={styles['button-send']}>
           <button type="submit">Send</button>
@@ -46,15 +88,20 @@ export const TextBox = () => {
             {message.text}
             {message.sender === 'me' && <div className={styles.arrow} />}
           </div>
-          {message.sender === 'me' && (
+          {message.sender === 'me' && lastSender === 'bot' && (
             <div className={`${styles.answerBubble} ${styles.bot}`}>
-              ada yang bisa saya bantu?
+              {botmessages[index].text}
             </div>
           )}
         </div>
       ))}
+      <HistoryBox
+      onClearClick={clearMessages}
+      setMessagesToList={setMessagesToList}
+      isSubmitClicked={isSubmitClicked}
+      setIsSubmitClicked={setIsSubmitClicked}
+      userInput={text}
+      addMessage={addMessage}/>
     </div>
-    // </div>
   );
 };
-

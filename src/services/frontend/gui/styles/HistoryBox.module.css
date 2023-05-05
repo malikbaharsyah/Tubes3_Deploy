@@ -29,6 +29,13 @@
   font-weight: bold;
 }
 
+.active {
+  background-color: #3EE7BC;
+  box-shadow: inset 0 0 16px rgba(72, 84, 254, 1);
+  color: #000000;
+  font-weight: bold;
+}
+
 .historyBoxContainer {
   display: flex;
   flex-wrap: wrap;
@@ -37,4 +44,20 @@
   margin-bottom: 100px;
   height: 800px;
   width: 800px;
+}
+
+.clearButton {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+.clearButton:hover {
+  background-color: #3EE7BC;
+  box-shadow: inset 0 0 16px rgba(72, 84, 254, 1);
+  color: #000000;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 3px;
 }

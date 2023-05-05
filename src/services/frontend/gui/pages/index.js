@@ -30,7 +30,7 @@ export default function Home() {
           <div className={`${leftSideBarStyles['sidebar-text']}`}>
             <h2>HISTORY</h2>
           </div>
-            <NewChat />
+            {/* <NewChat /> */}
             <HistoryBox />
         </div>
         <div className={`${leftSideBarStyles['bottom-left-sidebar']}`}>
