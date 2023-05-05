@@ -14,15 +14,9 @@ export const RadioButton = () => {
     }
   };
 
-  const getSelectedOption = () => {
-    if (selectedOption === 'option1') {
-      return 'option1';
-    } else if (selectedOption === 'option2') {
-      return 'option2';
-    } else {
-      return '';
-    }
-  };
+  function getSelectedOption() {
+    return selectedOption;
+  }
 
   return (
     <div>

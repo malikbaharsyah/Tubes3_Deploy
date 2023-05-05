@@ -3,7 +3,7 @@ import styles from '../styles/ChatBox.module.css';
 import axios from 'axios';
 import { HistoryBox } from './history';
 
-export const TextBox = (getSelectedOption) => {
+export const TextBox = ({getSelectedOption}) => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
   const [lastSender, setLastSender] = useState('');
@@ -30,10 +30,7 @@ export const TextBox = (getSelectedOption) => {
       console.log(getSelectedOption);
       try {
         var response;
-        if (getSelectedOption === "") {
-          alert("Pilih algoritma terlebih dahulu!")
-        }
-        else if (getSelectedOption === "option1") {
+        if (getSelectedOption === "option1") {
           response = await axios.get(`http://localhost:8000/api/gpt/0/${text}`);
         } else {
           response = await axios.get(`http://localhost:8000/api/gpt/1/${text}`);
