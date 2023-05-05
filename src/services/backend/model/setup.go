@@ -144,10 +144,29 @@ func Delete(c *gin.Context) {
 
 func ShowHistory(c *gin.Context) {
 	id := c.Param("id")
-	var history []History1
 	MigrateToHistory(id)
-	DB.Find(&history)
-	c.JSON(http.StatusOK, gin.H{"history": history})
+	switch id {
+	case "1":
+		var history []History1
+		DB.Find(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "2":
+		var history []History2
+		DB.Find(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "3":
+		var history []History3
+		DB.Find(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "4":
+		var history []History4
+		DB.Find(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "5":
+		var history []History5
+		DB.Find(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	}
 }
 
 
@@ -172,19 +191,53 @@ func MigrateToGPT() {
 func AddHistory(c *gin.Context) {
 	id := c.Param("id")
 	MigrateToHistory(id)
-	var history History1
-	if err := c.ShouldBindJSON(&history); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
+	switch id {
+	case "1":
+		var history History1
+		if err := c.ShouldBindJSON(&history); err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		DB.Create(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "2":
+		var history History2
+		if err := c.ShouldBindJSON(&history); err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		DB.Create(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "3":
+		var history History3
+		if err := c.ShouldBindJSON(&history); err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		DB.Create(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "4":
+		var history History4
+		if err := c.ShouldBindJSON(&history); err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		DB.Create(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
+	case "5":
+		var history History5
+		if err := c.ShouldBindJSON(&history); err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		DB.Create(&history)
+		c.JSON(http.StatusOK, gin.H{"history": history})
 	}
-	DB.Create(&history)
-	c.JSON(http.StatusOK, gin.H{"history": history})
 }
 
 func DeleteHistory(c *gin.Context) {
 	id := c.Param("id")
 	MigrateToHistory(id)
-	// clear all data inside history with id table
 	DB.Exec("DELETE FROM history" + id)
 	c.JSON(http.StatusOK, gin.H{"message": "Data berhasil dihapus"})
 }

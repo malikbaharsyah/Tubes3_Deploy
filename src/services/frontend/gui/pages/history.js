@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const HistoryBox = ({ onClearClick, setMessagesToList,
   isSubmitClicked, setIsSubmitClicked, userInput,
-  addMessage }) => {
+  addMessage, newBotMessage }) => {
   const buttons = ["History 1", "History 2", "History 3", "History 4", "History 5"];
   const [activeIndex, setActiveIndex] = useState(-1);
   const listOfQuestions = ["Q1", "Q2", "Q3", "Q4", "Q5"];
@@ -19,6 +19,7 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
       }
       else {
         addMessage(userInput);
+        addMessageToHistory(activeIndex, userInput, newBotMessage.text);
       }
       setIsSubmitClicked(false); // Reset the submit click state
     }
@@ -33,6 +34,7 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
 
   const handleClearClick = (index) => {
     setActiveIndex(-1);
+    deleteHistoryDatabase(index);
     onClearClick();
   };
 
@@ -49,6 +51,25 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
         }
         setMessagesToList(listOfQuestions, listOfAnswers);
       }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const deleteHistoryDatabase = async (index) => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/history/${index+1}`);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const addMessageToHistory = async (index, question, answer) => {
+    try {
+      const response = await axios.post(`http://localhost:8000/api/history/${index+1}`, {
+        pertanyaan: question,
+        jawaban: answer
+      });
     } catch (error) {
       console.error(error);
     }

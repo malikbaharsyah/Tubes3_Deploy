@@ -101,7 +101,8 @@ export const TextBox = () => {
       isSubmitClicked={isSubmitClicked}
       setIsSubmitClicked={setIsSubmitClicked}
       userInput={text}
-      addMessage={addMessage}/>
+      addMessage={addMessage}
+      newBotMessage={newBotMessage}/>
     </div>
   );
 };
