@@ -14,7 +14,7 @@ func main() {
 	r.Use(cors.Default())
 
 	r.GET("/api/gpts", model.Index)
-	r.GET("/api/gpt/*pertanyaan", model.Show)
+	r.GET("/api/gpt/:param/*pertanyaan", model.Show)
 	r.GET("/api/history/:id", model.ShowHistory)
 	r.POST("/api/gpt", model.Create)
 	r.POST("/api/history/:id", model.AddHistory) 

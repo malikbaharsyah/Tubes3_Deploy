@@ -79,7 +79,15 @@ func Show(c *gin.Context) {
 	pertanyaan := c.Param("pertanyaan")
 	pertanyaan = pertanyaan[1:]
 	fmt.Println(pertanyaan)
-	response := algorithm.ParseInput(pertanyaan, questions, 0)
+	param := c.Param("param")
+	// set param to int
+	var param_int int
+	if param == "0" {
+		param_int = 0
+	} else {
+		param_int = 1
+	}
+	response := algorithm.ParseInput(pertanyaan, questions, param_int)
 	fmt.Println(response)
 	if response[0] == "kalender" || response[0] == "kalkulator" {
 		answer := []string{}
@@ -87,17 +95,47 @@ func Show(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"answer": answer})
 	} else if response[0] == "tambah" {
 		answer := []string{}
-		answer = append(answer, "Pertanyaan " + response[1] + " telah ditambah")
-		c.JSON(http.StatusOK, gin.H{"answer": answer})
+		var gpt ChatGPT
+		gpt.Pertanyaan = response[1]
+		gpt.Jawaban = response[2]
+		// if pertanyaan exists in database, update
+		// else create new pertanyaan
+		if DB.Where("pertanyaan = ?", response[1]).First(&gpt).RowsAffected != 0 {
+			DB.Model(&gpt).Where("pertanyaan = ?", response[1]).Update("jawaban", response[2])
+			answer = append(answer, "Pertanyaan " + response[1] + " sudah ada ! jawaban diupdate ke " + response[2])
+			c.JSON(http.StatusOK, gin.H{"answer": answer})
+		} else {
+			DB.Create(&gpt)
+			answer = append(answer, "Pertanyaan " + response[1] + " telah ditambahkan")
+			c.JSON(http.StatusOK, gin.H{"answer": answer})
+		}
 	} else if response[0] == "hapus" {
 		answer := []string{}
-		answer = append(answer, "Pertanyaan " + response[1] + " telah dihapus")
+		var gpt ChatGPT
+		// if pertanyaan exists, delete
+		// else c.JSON(http.StatusOK, gin.H{"answer": "Tidak ada pertanyaan " + response[1] + " pada database!"})
+		if DB.Where("pertanyaan = ?", response[1]).First(&gpt).RowsAffected != 0 {
+			DB.Delete(&gpt)
+			answer = append(answer, "Pertanyaan " + response[1] + " telah dihapus")
+			c.JSON(http.StatusOK, gin.H{"answer": answer})
+		} else {
+			answer = append(answer, "Tidak ada pertanyaan " + response[1] + " pada database!")
+			c.JSON(http.StatusOK, gin.H{"answer": answer})
+		}
+	} else if response[0] == "jawaban" {
+		// get jawaban from database
+		answer := []string{}
+		var gpt ChatGPT
+		if DB.Where("pertanyaan = ?", response[1]).First(&gpt).RowsAffected != 0 {
+			answer = append(answer, gpt.Jawaban)
+		} else {
+			answer = append(answer, "Tidak ada pertanyaan " + response[1] + " pada database!")
+		}
+
 		c.JSON(http.StatusOK, gin.H{"answer": answer})
 	} else if response[0] == "rekomendasi" {
 		answer := []string{}
-		for i := 1; i < len(response); i++ {
-			answer = append(answer, response[i])
-		}
+		answer = append(answer, response[1])
 		c.JSON(http.StatusOK, gin.H{"answer": answer})
 	}
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const HistoryBox = ({ onClearClick, setMessagesToList,
   isSubmitClicked, setIsSubmitClicked, userInput,
-  addMessage }) => {
+  addMessage}) => {
   const buttons = ["History 1", "History 2", "History 3", "History 4", "History 5"];
   const [activeIndex, setActiveIndex] = useState(-1);
 
@@ -16,7 +16,9 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
           alert("Pilih history terlebih dahulu!");
         } else {
           const botResponse = await addMessage(userInput);
+          if (botResponse) {
           addMessageToHistory(activeIndex, userInput, botResponse);
+          }
         }
         setIsSubmitClicked(false); // Reset the submit click state
       }
@@ -42,7 +44,7 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
     try {
       const response = await axios.get(`http://localhost:8000/api/history/${index+1}`);
       const database = response.data.history;
-      if (database) {
+      if (database && database.length > 0) {
         var listOfQuestions = [];
         var listOfAnswers = [];
         for (var i = 0; i < database.length; i++) {
@@ -50,11 +52,15 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
           listOfAnswers.push(database[i].jawaban);
         }
         setMessagesToList(listOfQuestions, listOfAnswers);
+      } else {
+        // If the database is empty, set the history to empty arrays
+        setMessagesToList([], []);
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+  
 
   const deleteHistoryDatabase = async (index) => {
     try {

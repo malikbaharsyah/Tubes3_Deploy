@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/RadioButton.module.css';
+import { TextBox } from './chatBox';
 
 export const RadioButton = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -10,6 +11,16 @@ export const RadioButton = () => {
       setSelectedOption('');
     } else {
       setSelectedOption(value);
+    }
+  };
+
+  const getSelectedOption = () => {
+    if (selectedOption === 'option1') {
+      return 'option1';
+    } else if (selectedOption === 'option2') {
+      return 'option2';
+    } else {
+      return '';
     }
   };
 
@@ -25,6 +36,9 @@ export const RadioButton = () => {
         <span className={styles.checkmark}></span>
         Boyer Moore
       </label>
+      <TextBox
+        getSelectedOption={getSelectedOption}
+      />
     </div>
   );
 };

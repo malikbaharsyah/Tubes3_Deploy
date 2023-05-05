@@ -41,16 +41,26 @@ func ParseInput(input string, listOfQuestion []string, param int) []string {
 	} else {
 		fmt.Println("Question")
 		question, index := searchQuestion(input, listOfQuestion, param)
-		rekomendasi := []string{"rekomendasi"}
-		if index[0] != -1 {
-			rekomendasi = append(rekomendasi, "Apakah maksud Anda: ")
-			for i := 0; i < len(question); i++ {
-				rekomendasi = append(rekomendasi, question[i])
-			}
+		respon := []string{}
+		if index[0] == -1 {
+			respon = append(respon, "jawaban")
+			respon = append(respon, "Saya tidak dapat menjawab pertanyaan Anda.")
 		} else {
-			rekomendasi = append(rekomendasi, "Saya tidak dapat menjawab pertanyaan Anda.")
+			// get the question length
+			questionLength := len(question)
+			if questionLength == 1 {
+				respon = append(respon, "jawaban")
+				respon = append(respon, question[0])
+			} else {
+				// make the question which i a list of string into a single string
+				answer := "Apakah maksud Anda "
+				questionString := strings.Join(question, " atau ")
+				fmt.Println(questionString)
+				respon = append(respon, "rekomendasi")
+				respon = append(respon, answer + questionString)
+			}
 		}
-		return rekomendasi
+		return respon
 	}
 }
 

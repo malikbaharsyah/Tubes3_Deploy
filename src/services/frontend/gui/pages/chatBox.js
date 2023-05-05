@@ -3,7 +3,7 @@ import styles from '../styles/ChatBox.module.css';
 import axios from 'axios';
 import { HistoryBox } from './history';
 
-export const TextBox = () => {
+export const TextBox = (getSelectedOption) => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
   const [lastSender, setLastSender] = useState('');
@@ -19,6 +19,7 @@ export const TextBox = () => {
     event.preventDefault();
     setIsSubmitClicked(true);
   };
+  
 
   const addMessage = async (text) => {
     if (text.trim() !== '') {
@@ -26,9 +27,18 @@ export const TextBox = () => {
       setMessages([...messages, newMessage]);
       setText('');
       setLastSender('me');
+      console.log(getSelectedOption);
       try {
-        const response = await axios.get(`http://localhost:8000/api/gpt/${text}`);
-        const database = response.data.answer;
+        var response;
+        if (getSelectedOption === "") {
+          alert("Pilih algoritma terlebih dahulu!")
+        }
+        else if (getSelectedOption === "option1") {
+          response = await axios.get(`http://localhost:8000/api/gpt/0/${text}`);
+        } else {
+          response = await axios.get(`http://localhost:8000/api/gpt/1/${text}`);
+        }
+        const database = response.data.answer[0];
         if (database) {
           const newBotMessage = { text: database, sender: 'bot' };
           setBotMessages([...botmessages, newBotMessage]);
