@@ -7,11 +7,11 @@ import (
 )
 
 func ParseInput(input string, listOfQuestion []string, param int) {
-	patternDate := `^(?i)(Hari\s\d{1,2}/\d{1,2}/\d{4}|\d{1,2}/\d{1,2}/\d{4})\??$`
+	patternDate := "^(?i)(Hari\\s\\d{1,2}/\\d{1,2}/\\d{4}|\\d{1,2}/\\d{1,2}/\\d{4})\\??$"
 	regDate := regexp.MustCompile(patternDate)
 
-	patternCal := `^(Hasil dari\s*|Hasil\s*)?-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*\s*(\?\s*|\s\?\s*)?$`
-	regCal := regexp.MustCompile(patternCal)
+	patternMath := `^(Hasil dari\s*|Hasil\s*)?-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*\s*(\?\s*|\s\?\s*)?$`
+	regCal := regexp.MustCompile(patternMath)
 
 	patternAdd := `(?i)^tambahkan pertanyaan\s(.+)\sdengan jawaban\s(.+)$`
 	regAdd := regexp.MustCompile(patternAdd)
@@ -21,16 +21,20 @@ func ParseInput(input string, listOfQuestion []string, param int) {
 
 	if regDate.MatchString(input) {
 		fmt.Println("Date")
-		input = getDate(input)
-		Calendar(input)
+		getInput := getDate(input)
+		fmt.Println(getInput)
+		date := Calendar(getInput)
+		fmt.Println(date)
 	} else if regCal.MatchString(input) {
 		fmt.Println("Calculator")
-		input = getCalculator(input)
-		Calculator(input)
+		getInput := getCalculator(input)
+		math := Calculator(getInput)
+		fmt.Println(math)
 	} else if regAdd.MatchString(input) {
 		fmt.Println("Add Question")
 		question, answer := extractQuestionAnswer(input)
-		fmt.Println(question, answer)
+		fmt.Println(question)
+		fmt.Println(answer)
 	} else if regDel.MatchString(input) {
 		fmt.Println("Delete Question")
 		question := getQuestionDeleteCommand(input)
@@ -43,7 +47,8 @@ func ParseInput(input string, listOfQuestion []string, param int) {
 }
 
 func getDate(input string) string {
-	reg := regexp.MustCompile(`^(?i)(Hari\s\d{1,2}/\d{1,2}/\d{4}|\d{1,2}/\d{1,2}/\d{4})\??$`)
+	patt := "^(?i)(Hari\\s)?(\\d{1,2}/\\d{1,2}/\\d{4})\\??$"
+	reg := regexp.MustCompile(patt)
 	matches := reg.FindStringSubmatch(input)
 	if len(matches) == 3 {
 		return matches[2]
@@ -52,7 +57,8 @@ func getDate(input string) string {
 }
 
 func getCalculator(input string) string {
-	reg := regexp.MustCompile(`^(Hasil dari\s*|Hasil\s*)?-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*\s*(\?\s*|\s\?\s*)?$`)
+	patt := "^(?i)Hasil dari (.+)|([0-9]+\\s*[-+*/%^]\\s*[0-9]+.*)$"
+	reg := regexp.MustCompile(patt)
 	matches := reg.FindStringSubmatch(input)
 	if len(matches) == 3 {
 		if len(matches[1]) > 0 {
