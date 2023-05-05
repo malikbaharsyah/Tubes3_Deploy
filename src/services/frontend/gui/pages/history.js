@@ -84,7 +84,7 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
   const historyButtons = buttons.map((button, index) => (
     <div
       className={`${styles['historyBox']} ${activeIndex === index ? styles['active'] : ''}`}
-      style={{ top: `${125 + (index + 1) * 50}px` }}
+      style={{ top: `${155 + (index + 1) * 50}px` }}
       key={index}
     >
       <div className={styles['historyButton']} onClick={() => handleHistoryClick(index)}>

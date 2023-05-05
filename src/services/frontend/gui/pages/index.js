@@ -26,6 +26,8 @@ export default function Home() {
       <div className={`${styles.column} ${styles['home']}`}>
         <RadioButton />
         <div className={`${leftSideBarStyles['left-sidebar']}`}>
+        <div className={`${leftSideBarStyles['logo']}`}>
+          </div>
           <div className={`${leftSideBarStyles['sidebar-text']}`}>
             <h2>HISTORY</h2>
           </div>
