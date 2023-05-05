@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func ParseInput(input string, listOfQuestion []string, param int) {
+func ParseInput(input string, listOfQuestion []string, param int) []string {
 	patternDate := "^(?i)(Hari\\s\\d{1,2}/\\d{1,2}/\\d{4}|\\d{1,2}/\\d{1,2}/\\d{4})\\??$"
 	regDate := regexp.MustCompile(patternDate)
 
@@ -24,25 +24,33 @@ func ParseInput(input string, listOfQuestion []string, param int) {
 		getInput := getDate(input)
 		fmt.Println(getInput)
 		date := Calendar(getInput)
-		fmt.Println(date)
+		return []string{"kalender", "Hari " + date}
 	} else if regCal.MatchString(input) {
 		fmt.Println("Calculator")
 		getInput := getCalculator(input)
 		math := Calculator(getInput)
-		fmt.Println(math)
+		return []string{"kalkulator", "Hasilnya adalah " + math}
 	} else if regAdd.MatchString(input) {
 		fmt.Println("Add Question")
 		question, answer := extractQuestionAnswer(input)
-		fmt.Println(question)
-		fmt.Println(answer)
+		return []string{"tambah", question, answer}
 	} else if regDel.MatchString(input) {
 		fmt.Println("Delete Question")
 		question := getQuestionDeleteCommand(input)
-		fmt.Println(question)
+		return []string{"hapus", question}
 	} else {
 		fmt.Println("Question")
 		question, index := searchQuestion(input, listOfQuestion, param)
-		fmt.Println(question, index)
+		rekomendasi := []string{"rekomendasi"}
+		if index[0] != -1 {
+			rekomendasi = append(rekomendasi, "Apakah maksud Anda: ")
+			for i := 0; i < len(question); i++ {
+				rekomendasi = append(rekomendasi, question[i])
+			}
+		} else {
+			rekomendasi = append(rekomendasi, "Saya tidak dapat menjawab pertanyaan Anda.")
+		}
+		return rekomendasi
 	}
 }
 

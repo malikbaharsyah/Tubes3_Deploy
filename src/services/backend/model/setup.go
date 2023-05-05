@@ -63,8 +63,6 @@ func ConnectDatabase() {
 	DB = database
 	// get all Pertanyaan inside chat_gpt table and store it in questions
 	DB.Model(&ChatGPT{}).Select("pertanyaan").Find(&questions)
-	// get all Jawaban inside chat_gpt table and store it in answers
-	DB.Model(&ChatGPT{}).Select("jawaban").Find(&answers)
 }
 
 func Index(c *gin.Context) {
@@ -81,10 +79,27 @@ func Show(c *gin.Context) {
 	pertanyaan := c.Param("pertanyaan")
 	pertanyaan = pertanyaan[1:]
 	fmt.Println(pertanyaan)
-	response := algorithm.ParseInput(pertanyaan, questions, answers)
+	response := algorithm.ParseInput(pertanyaan, questions, 0)
 	fmt.Println(response)
-
-	c.JSON(http.StatusOK, gin.H{"answer": response})
+	if response[0] == "kalender" || response[0] == "kalkulator" {
+		answer := []string{}
+		answer = append(answer, response[1])
+		c.JSON(http.StatusOK, gin.H{"answer": answer})
+	} else if response[0] == "tambah" {
+		answer := []string{}
+		answer = append(answer, "Pertanyaan " + response[1] + " telah ditambah")
+		c.JSON(http.StatusOK, gin.H{"answer": answer})
+	} else if response[0] == "hapus" {
+		answer := []string{}
+		answer = append(answer, "Pertanyaan " + response[1] + " telah dihapus")
+		c.JSON(http.StatusOK, gin.H{"answer": answer})
+	} else if response[0] == "rekomendasi" {
+		answer := []string{}
+		for i := 1; i < len(response); i++ {
+			answer = append(answer, response[i])
+		}
+		c.JSON(http.StatusOK, gin.H{"answer": answer})
+	}
 
 }
 

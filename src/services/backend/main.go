@@ -23,5 +23,4 @@ func main() {
 	r.DELETE("/api/history/:id", model.DeleteHistory)
 
 	r.Run(":8000")
-
 }
