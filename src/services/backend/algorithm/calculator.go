@@ -2,23 +2,13 @@ package algorithm
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 )
 
 func Calculator(input string) string {
-	fmt.Println("Input:", input)
-
-	pattern := `^\s*-?\s*(\(\s*)*\s*-?\s*\d+(\.\d+)?(\s*\))*\s*(\s*[-+*/]\s*(\(\s*)*\s*-?\s*(\(\s*)*\d+(\.\d+)?(\s*\))*\s*)*$`
-	match, _ := regexp.MatchString(pattern, input)
-
-	if !match {
-		fmt.Println("Invalid input")
-		return "Invalid input"
-	}
-
 	result, _ := evaluateExpression(input)
-	return strconv.FormatFloat(result, 'f', -1, 32)
+	convResult := strconv.FormatFloat(result, 'f', -1, 32)
+	return convResult
 }
 
 func evaluateExpression(expression string) (float64, error) {

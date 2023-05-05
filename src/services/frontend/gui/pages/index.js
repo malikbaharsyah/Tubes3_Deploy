@@ -2,9 +2,8 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import leftSideBarStyles from '../styles/LeftSideBar.module.css';
 import ChatBoxStyles from '../styles/ChatBox.module.css';
-import RadioButtonStyles from '../styles/RadioButton.module.css';
 
-import { TextBox } from './textBox';
+import { TextBox } from './chatBox';
 import { RadioButton } from './radioButton';
 import { NewChat } from './newChat';
 import { HistoryBox } from './history';
