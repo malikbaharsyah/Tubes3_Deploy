@@ -53,7 +53,7 @@ type History5 struct {
 
 
 func ConnectDatabase() {
-	database, err := gorm.Open(mysql.Open("root:root@tcp(localhost:3306)/gpt"))
+	database, err := gorm.Open(mysql.Open("root:opEiqwNZ5ljqbstec2Pu@tcp(containers-us-west-72.railway.app:6044)/railway"))
 	if err != nil {
 		panic(err)
 	}
