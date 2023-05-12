@@ -3,7 +3,7 @@ import styles from '../styles/ChatBox.module.css';
 import axios from 'axios';
 import { HistoryBox } from './history';
 
-export const TextBox = ({getSelectedOption}) => {
+export const TextBox = () => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
   const [lastSender, setLastSender] = useState('');
@@ -27,10 +27,10 @@ export const TextBox = ({getSelectedOption}) => {
       setMessages([...messages, newMessage]);
       setText('');
       setLastSender('me');
-      console.log(getSelectedOption);
+      console.log(sessionStorage.getItem('selectedOption'));
       try {
         var response;
-        if (getSelectedOption === "option1") {
+        if (sessionStorage.getItem('selectedOption') === "option1") {
           response = await axios.get(`https://tubes3deploy-production.up.railway.app/api/gpt/0/${text}`);
         } else {
           response = await axios.get(`https://tubes3deploy-production.up.railway.app/api/gpt/1/${text}`);
