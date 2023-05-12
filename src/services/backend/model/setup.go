@@ -51,7 +51,6 @@ type History5 struct {
 	Jawaban    string `gorm:"type:text" json:"jawaban"`
 }
 
-
 func ConnectDatabase() {
 	database, err := gorm.Open(mysql.Open("root:opEiqwNZ5ljqbstec2Pu@tcp(containers-us-west-72.railway.app:6044)/railway"))
 	if err != nil {
@@ -76,6 +75,7 @@ func Index(c *gin.Context) {
 
 func Show(c *gin.Context) {
 	MigrateToGPT()
+	getQuestions()
 	pertanyaan := c.Param("pertanyaan")
 	pertanyaan = pertanyaan[1:]
 	fmt.Println(pertanyaan)
@@ -102,11 +102,11 @@ func Show(c *gin.Context) {
 		// else create new pertanyaan
 		if DB.Where("pertanyaan = ?", response[1]).First(&gpt).RowsAffected != 0 {
 			DB.Model(&gpt).Where("pertanyaan = ?", response[1]).Update("jawaban", response[2])
-			answer = append(answer, "Pertanyaan " + response[1] + " sudah ada ! jawaban diupdate ke " + response[2])
+			answer = append(answer, "Pertanyaan "+response[1]+" sudah ada ! jawaban diupdate ke "+response[2])
 			c.JSON(http.StatusOK, gin.H{"answer": answer})
 		} else {
 			DB.Create(&gpt)
-			answer = append(answer, "Pertanyaan " + response[1] + " telah ditambahkan")
+			answer = append(answer, "Pertanyaan "+response[1]+" telah ditambahkan")
 			c.JSON(http.StatusOK, gin.H{"answer": answer})
 		}
 	} else if response[0] == "hapus" {
@@ -116,10 +116,10 @@ func Show(c *gin.Context) {
 		// else c.JSON(http.StatusOK, gin.H{"answer": "Tidak ada pertanyaan " + response[1] + " pada database!"})
 		if DB.Where("pertanyaan = ?", response[1]).First(&gpt).RowsAffected != 0 {
 			DB.Delete(&gpt)
-			answer = append(answer, "Pertanyaan " + response[1] + " telah dihapus")
+			answer = append(answer, "Pertanyaan "+response[1]+" telah dihapus")
 			c.JSON(http.StatusOK, gin.H{"answer": answer})
 		} else {
-			answer = append(answer, "Tidak ada pertanyaan " + response[1] + " pada database!")
+			answer = append(answer, "Tidak ada pertanyaan "+response[1]+" pada database!")
 			c.JSON(http.StatusOK, gin.H{"answer": answer})
 		}
 	} else if response[0] == "jawaban" {
@@ -129,7 +129,7 @@ func Show(c *gin.Context) {
 		if DB.Where("pertanyaan = ?", response[1]).First(&gpt).RowsAffected != 0 {
 			answer = append(answer, gpt.Jawaban)
 		} else {
-			answer = append(answer, "Tidak ada pertanyaan " + response[1] + " pada database!")
+			answer = append(answer, "Tidak ada pertanyaan "+response[1]+" pada database!")
 		}
 
 		c.JSON(http.StatusOK, gin.H{"answer": answer})
@@ -222,17 +222,16 @@ func ShowHistory(c *gin.Context) {
 	}
 }
 
-
 func MigrateToHistory(id string) {
-	if (id == "1") {
+	if id == "1" {
 		DB.AutoMigrate(&History1{})
-	} else if (id == "2") {
+	} else if id == "2" {
 		DB.AutoMigrate(&History2{})
-	} else if (id == "3") {
+	} else if id == "3" {
 		DB.AutoMigrate(&History3{})
-	} else if (id == "4") {
+	} else if id == "4" {
 		DB.AutoMigrate(&History4{})
-	} else if (id == "5") {
+	} else if id == "5" {
 		DB.AutoMigrate(&History5{})
 	}
 }
@@ -293,4 +292,9 @@ func DeleteHistory(c *gin.Context) {
 	MigrateToHistory(id)
 	DB.Exec("DELETE FROM history" + id)
 	c.JSON(http.StatusOK, gin.H{"message": "Data berhasil dihapus"})
+}
+
+func getQuestions() {
+	MigrateToGPT()
+	DB.Model(&ChatGPT{}).Select("pertanyaan").Find(&questions)
 }
