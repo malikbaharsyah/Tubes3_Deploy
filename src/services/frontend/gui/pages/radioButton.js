@@ -36,3 +36,5 @@ export const RadioButton = () => {
     </div>
   );
 };
+
+export default RadioButton;

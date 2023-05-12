@@ -42,7 +42,7 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
 
   const getHistoryDatabase = async (index) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/history/${index+1}`);
+      const response = await axios.get(`https://tubes3deploy-production.up.railway.app/api/history/${index+1}`);
       const database = response.data.history;
       if (database && database.length > 0) {
         var listOfQuestions = [];
@@ -64,7 +64,7 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
 
   const deleteHistoryDatabase = async (index) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/history/${index+1}`);
+      const response = await axios.delete(`https://tubes3deploy-production.up.railway.app/api/history/${index+1}`);
     } catch (error) {
       console.error(error);
     }
@@ -72,7 +72,7 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
 
   const addMessageToHistory = async (index, question, answer) => {
     try {
-      const response = await axios.post(`http://localhost:8000/api/history/${index+1}`, {
+      const response = await axios.post(`https://tubes3deploy-production.up.railway.app/api/history/${index+1}`, {
         pertanyaan: question,
         jawaban: answer
       });
@@ -100,3 +100,4 @@ export const HistoryBox = ({ onClearClick, setMessagesToList,
 
   return <div className={styles['historyBoxContainer']}>{historyButtons}</div>;
 };
+export default HistoryBox;

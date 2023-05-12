@@ -31,9 +31,9 @@ export const TextBox = ({getSelectedOption}) => {
       try {
         var response;
         if (getSelectedOption === "option1") {
-          response = await axios.get(`http://localhost:8000/api/gpt/0/${text}`);
+          response = await axios.get(`https://tubes3deploy-production.up.railway.app/api/gpt/0/${text}`);
         } else {
-          response = await axios.get(`http://localhost:8000/api/gpt/1/${text}`);
+          response = await axios.get(`https://tubes3deploy-production.up.railway.app/api/gpt/1/${text}`);
         }
         const database = response.data.answer[0];
         if (database) {
@@ -115,3 +115,5 @@ export const TextBox = ({getSelectedOption}) => {
     </div>
   );
 };
+
+export default TextBox;
