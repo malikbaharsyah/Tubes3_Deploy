@@ -296,5 +296,6 @@ func DeleteHistory(c *gin.Context) {
 
 func getQuestions() {
 	MigrateToGPT()
+	questions = []string{}
 	DB.Model(&ChatGPT{}).Select("pertanyaan").Find(&questions)
 }
