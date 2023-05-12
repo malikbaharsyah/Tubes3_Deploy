@@ -22,5 +22,5 @@ func main() {
 	r.DELETE("/api/gpt", model.Delete)
 	r.DELETE("/api/history/:id", model.DeleteHistory)
 
-	r.Run(":8000")
+	r.Run()
 }
